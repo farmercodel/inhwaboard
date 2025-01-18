@@ -3,6 +3,9 @@ package com.study.board.controller;
 import com.study.board.Service.BoardService;
 import com.study.board.entity.Board;
 import com.study.board.repository.BoardRepository;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,23 +18,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+@RequiredArgsConstructor
 @Controller // 컨트롤러임을 알려주는 어노테이션
+@RequestMapping("/board")
 public class BoardController {
     @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
     @Autowired
-    private BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
 
-    public BoardController(BoardService boardService) {
-        this.boardService = boardService;
-    }
 
-    @GetMapping("/board/write") // localhost:8080/board/write
+    @GetMapping("/write") // localhost:8080/board/write
     public String boardWriteForm() {
         return "boardwrite";
     }
 
-    @PostMapping("/board/writepro")
+    @PostMapping("/writepro")
     public String boardWritePro(Board board, Model model, MultipartFile file) throws Exception {
         boardService.write(board, file);
 
@@ -41,7 +43,7 @@ public class BoardController {
         return "message";
     }
 
-    @GetMapping("/board/list")
+    @GetMapping("/list")
     // 모델 객체는 컨트롤러와 뷰 간 데이터 전송을 담당함.
     // 따라서 컨트롤러에서 처리한 데이터를 뷰에 전달 가능!
     public String boardList(Model model, @PageableDefault(page=0, size=10, sort="id", direction = Sort.Direction.DESC) Pageable pageable, String searchKeyword) {
@@ -66,7 +68,7 @@ public class BoardController {
         return "boardlist";
     }
 
-    @GetMapping("/board/view")
+    @GetMapping("/view")
     // 만약 localhost:8080/board/view?id=1 이런 식으로 접근하면 Integer id = 1로 들어간다.
     // 이런 방식으로 게시글을 불러옴!
     public String ViewBoard(Model model, @RequestParam Integer id) {
@@ -74,14 +76,14 @@ public class BoardController {
         return "boardview";
     }
 
-    @GetMapping("/board/modify/{id}")
+    @GetMapping("/modify/{id}")
     public String boardModify(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("board", boardService.boardView(id));
 
         return "boardmodify";
     }
 
-    @PostMapping("/board/update/{id}")
+    @PostMapping("/update/{id}")
     public String boardUpdate(@PathVariable("id") Integer id, Board board, Model model) {
         // 기존 게시글 검색
         Board boardTemp = boardService.boardView(id);
@@ -99,7 +101,7 @@ public class BoardController {
         return "message";
     }
 
-    @GetMapping("/board/delete")
+    @GetMapping("/delete")
     public String boardDelete(@RequestParam Integer id, Model model) {
         boardService.boardDelete(id);
 

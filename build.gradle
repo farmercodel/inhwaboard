@@ -32,6 +32,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.junit.jupiter:junit-jupiter' // // Junit - test/java/com부분을 위함
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // // Junit - test/java/com부분을 위함
 }
 
 tasks.named('test') {

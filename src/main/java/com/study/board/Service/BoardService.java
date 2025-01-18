@@ -2,6 +2,9 @@ package com.study.board.Service;
 
 import com.study.board.entity.Board;
 import com.study.board.repository.BoardRepository;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,13 +17,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+@RequiredArgsConstructor // 기본생성자 어노테이션
 @Service
 public class BoardService {
     // @Autowired는 BoardRepository boardRepository = new BoardRepository() 이렇게 작성할 필요 없이 주입 해줌.
     // Dependency Injection (의존성 주입) 해주는 어노테이션임!
     // BoardRepository 인터페이스의 구현체를 BoardService 클래스의 boardRepository 필드에 자동으로 주입
     @Autowired
-    private BoardRepository boardRepository;
+    private final BoardRepository boardRepository; // // final 추천
 
     // 글 작성 처리
     public void write(Board board, MultipartFile file) throws Exception {
